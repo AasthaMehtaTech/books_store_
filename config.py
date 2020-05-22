@@ -5,7 +5,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'A12345'
+    SECRET_KEY = '0157'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 
@@ -37,5 +37,5 @@ Commands to run
     pip install flask_migrate
     pip install psycopg2-binary
     python manage.py db init
-       
+
         '''
