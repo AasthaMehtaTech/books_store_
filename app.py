@@ -12,6 +12,20 @@ db = SQLAlchemy(app)
 
 from models import Course
 
+def url_cleaner(course_url):
+    ignore_char = ['https', 'www', '.in', 'http', '.com', ':', '//']  # Replaced with Nothing
+    unwanted_char = ['/', '?', '.', '=', '-', '+']  # Replaced with Single Space
+    clean_url = course_url
+    for char in ignore_char:
+        clean_url = clean_url.replace(char, '')
+    for char in unwanted_char:
+        clean_url = clean_url.replace(char, ', ')
+    return clean_url
+
+def most_common(ini_list, len = 10):
+    result = sorted(set(ini_list), key = ini_list.count, reverse = True)
+    return result[:len]
+
 @app.route("/")
 def hello():
     return "Hello World!"
@@ -59,6 +73,8 @@ def add_course_form():
         course_url=request.form.get('course_url')
         english=request.form.get('english')
         hindi=request.form.get('hindi')
+        clean_url = url_cleaner(course_url)
+        course_tags = clean_url.lower()
         try:
             course=Course(
                 first_name=first_name,
@@ -67,7 +83,8 @@ def add_course_form():
                 contact=contact,
                 course_url=course_url,
                 english=english,
-                hindi=hindi
+                hindi=hindi,
+                course_tags=course_tags
             )
             db.session.add(course)
             db.session.commit()
@@ -78,12 +95,12 @@ def add_course_form():
 
 @app.route("/search_buddy/",methods=['GET', 'POST'])
 def search_buddy_form():
+    students_detail = list()
+    result_description = ''
     if request.method == 'POST':
         course_url=request.form.get('course_url')
         english=request.form.get('english')
         hindi=request.form.get('hindi')
-        students_detail = list()
-        result_description = ''
         try:
             course=Course.query.filter_by(course_url=course_url).filter(or_(Course.english == english, Course.hindi == hindi)).all()
             for item in course:
@@ -97,11 +114,37 @@ def search_buddy_form():
                     languages += 'Hindi'
                 data['languages'] = languages
                 students_detail.append(data) # jsonify(course.serialize())
-            result_description = f'Results for {course_url}'
+            result_description = f'Results for {course_url}:'
             return render_template("search_buddy.html", students_detail=students_detail, result_description=result_description)
         except Exception as e:
     	    return(str(e))
     return render_template("search_buddy.html", students_detail = students_detail, result_description=result_description)
+
+@app.route("/search_course/",methods=['GET', 'POST'])
+def search_course_form():
+    courses_detail = list()
+    result_description = ''
+    if request.method == 'POST':
+        course_tags=request.form.get('course_tags')
+        course_tags_list = course_tags.lower().split(',')
+        try:
+            course_list = list()
+            for tag in course_tags_list:
+                courses=Course.query.filter(Course.course_tags.like(f'%{tag}%')).with_entities(Course.course_url).all()
+                url_list = list(set([url[0] for url in courses]))
+                course_list.extend(url_list)
+            results = most_common(course_list)
+            courses_detail.extend(results) # jsonify(course.serialize())
+            result_description = f'Results for {course_tags}:'
+            return render_template("search_course.html", courses_detail=courses_detail, result_description=result_description)
+        except Exception as e:
+    	    return(str(e))
+    return render_template("search_course.html", courses_detail = courses_detail, result_description=result_description)
+
+# TODO:
+# Implement Find Learners
+# Homepage
+# Deploy on Heroku
 
 if __name__ == '__main__':
     app.run()

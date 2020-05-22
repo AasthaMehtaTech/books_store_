@@ -11,15 +11,17 @@ class Course(db.Model):
     course_url = db.Column(db.String())
     english = db.Column(db.String())
     hindi = db.Column(db.String())
+    course_tags = db.Column(db.String())
 
-    def __init__(self,first_name,last_name,email_address,contact,course_url,english,hindi):
+    def __init__(self,first_name,last_name,email_address,contact,course_url,english,hindi,course_tags):
         self.first_name=first_name,
         self.last_name=last_name,
         self.email_address=email_address,
         self.contact=contact,
         self.course_url=course_url,
         self.english=english,
-        self.hindi=hindi
+        self.hindi=hindi,
+        self.course_tags=course_tags
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -33,5 +35,6 @@ class Course(db.Model):
             'contact': self.contact,
             'course_url': self.course_url,
             'english': self.english,
-            'hindi': self.hindi
+            'hindi': self.hindi,
+            'course_tags': self.course_tags
         }
