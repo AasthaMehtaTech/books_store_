@@ -82,12 +82,26 @@ def search_buddy_form():
         course_url=request.form.get('course_url')
         english=request.form.get('english')
         hindi=request.form.get('hindi')
+        students_detail = list()
+        result_description = ''
         try:
-            course=Course.query.filter_by(course_url=course_url).filter(or_(Course.english == english, Course.hindi == hindi)).first()
-            return jsonify(course.serialize())
+            course=Course.query.filter_by(course_url=course_url).filter(or_(Course.english == english, Course.hindi == hindi)).all()
+            for item in course:
+                data = item.serialize()
+                languages = ''
+                if data['english']=='on' and data['hindi']=='on':
+                    languages += 'English, Hindi'
+                elif data['english']=='on':
+                    languages += 'English'
+                elif data['hindi']=='on':
+                    languages += 'Hindi'
+                data['languages'] = languages
+                students_detail.append(data) # jsonify(course.serialize())
+            result_description = f'Results for {course_url}'
+            return render_template("search_buddy.html", students_detail=students_detail, result_description=result_description)
         except Exception as e:
     	    return(str(e))
-    return render_template("search_buddy.html")
+    return render_template("search_buddy.html", students_detail = students_detail, result_description=result_description)
 
 if __name__ == '__main__':
     app.run()

@@ -45,9 +45,31 @@
                 </div>
                 <br>
                 <button type="submit " class="btn btn-primary " style="float:right ">Submit</button>
-
             </form>
-            <br><br>
+            <br>
+            <br>
+            <br>
+            <div class="form-row">
+              <p>{{result_description}}</p>
+            </div>
+            <div class="form-row">
+              <table style="width:100%">
+                <tr>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Email Address</th>
+                  <th>Languages</th>
+                </tr>
+                {% for item in students_detail %}
+                <tr>
+                  <td>{{item['first_name']}}</td>
+                  <td>{{item['last_name']}}</td>
+                  <td>{{item['email_address']}}</td>
+                  <td>{{item['languages']}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
         </div>
     </div>
 
