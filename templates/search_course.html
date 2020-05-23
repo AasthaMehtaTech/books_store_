@@ -31,7 +31,7 @@
                     <small id="description" class="form-text text-muted">Paste Course Tags (Comma Seprated) whose learners you want to find.</small>
                 </div>
                 <br>
-                <button type="submit " class="btn btn-primary " style="float:right ">Submit</button>
+                <button type="submit " class="btn btn-primary " style="float:right ">Search</button>
             </form>
             <br>
             <br>
@@ -48,7 +48,14 @@
                 {% for item in courses_detail %}
                 <tr>
                   <td><a href={{item}}>{{item}}</a></td>
-                  <td>Will think later...</td>
+                  <td>
+                    <form action="{{ url_for('search_buddy_form') }}" method="POST">
+                      <input type="hidden" id="course_url" name="course_url" value="{{item}}">
+                      <input type="hidden" id="english" name="english" value="on">
+                      <input type="hidden" id="hindi" name="hindi" value="on">
+                      <button type="submit " class="btn btn-primary " style="float:right ">Search Buddies</button>
+                    </form>
+                  </td>
                 </tr>
                 {% endfor %}
               </table>

@@ -27,8 +27,8 @@ def most_common(ini_list, len = 10):
     return result[:len]
 
 @app.route("/")
-def hello():
-    return "Hello World!"
+def index():
+    return render_template("index.html")
 
 @app.route("/add")
 def add_book():
@@ -142,9 +142,9 @@ def search_course_form():
     return render_template("search_course.html", courses_detail = courses_detail, result_description=result_description)
 
 # TODO:
-# Implement Find Learners
-# Homepage
-# Deploy on Heroku
+# Implement Find Learners   [YES]
+# Homepage                  [YES]
+# Deploy on Heroku          []
 
 if __name__ == '__main__':
     app.run()
