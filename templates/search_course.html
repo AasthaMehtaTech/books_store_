@@ -25,10 +25,13 @@
 
                 <label for="name">Course Tags</label>
                 <div class="form-row">
-                    <input class="form-control" type="text" placeholder="Course Tags" id="course_tags" name="course_tags">
+                    <input class="form-control" type="text" placeholder="Course Tags" id="course_tags" name="course_tags", value="{{added_tags}}">
                 </div>
                 <div class="form-row">
                     <small id="description" class="form-text text-muted">Paste Course Tags (Comma Seprated) whose learners you want to find.</small>
+                </div>
+                <div class="form-row">
+                    <small id="tag_hint" class="form-text text-muted">Tag Hint: {{clean_tag}}.</small>
                 </div>
                 <br>
                 <button type="submit " class="btn btn-primary " style="float:right ">Search</button>

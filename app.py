@@ -125,6 +125,13 @@ def search_buddy_form():
 def search_course_form():
     courses_detail = list()
     result_description = ''
+    all_tags_list=Course.query.with_entities(Course.course_tags).all()
+    tag_list = list()
+    for tag_string in all_tags_list:
+        tag_list.extend(tag_string[0].split(', '))
+    clean_tag_list = list(set(tag_list))
+    clean_tag_list.remove('')
+    clean_tag = ', '.join(clean_tag_list)
     if request.method == 'POST':
         course_tags=request.form.get('course_tags')
         course_tags_list = course_tags.lower().split(',')
@@ -137,10 +144,10 @@ def search_course_form():
             results = most_common(course_list)
             courses_detail.extend(results) # jsonify(course.serialize())
             result_description = f'Results for {course_tags}:'
-            return render_template("search_course.html", courses_detail=courses_detail, result_description=result_description)
+            return render_template("search_course.html", courses_detail=courses_detail, result_description=result_description, clean_tag=clean_tag)
         except Exception as e:
     	    return(str(e))
-    return render_template("search_course.html", courses_detail = courses_detail, result_description=result_description)
+    return render_template("search_course.html", courses_detail = courses_detail, result_description=result_description, clean_tag=clean_tag)
 
 # TODO:
 # Implement Find Learners   [YES]
@@ -151,7 +158,8 @@ def search_course_form():
 
 # Notification if no result found
 # Goto Homepage
-# Clickable Email Address on search_buddy
+# Clickable Email Address on search_buddy [YES]
+# Tag Hint      [YES]
 # Auto Email Generation by clicking on show interest
 # Deploy on Heroku          []
 
