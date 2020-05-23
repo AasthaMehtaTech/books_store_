@@ -64,12 +64,29 @@
                 <tr>
                   <td>{{item['first_name']}}</td>
                   <td>{{item['last_name']}}</td>
-                  <td>{{item['email_address']}}</td>
+                  <td><a href="mailto:{{item['email_address']}}">{{item['email_address']}}</a></td>
                   <td>{{item['languages']}}</td>
                 </tr>
                 {% endfor %}
               </table>
             </div>
+              {% if students_detail==[] and course_url!='' %}
+              <br>
+              <br>
+              <br>
+              <div class="form-row align-items-center justify-content-center">
+                  <p>Sorry! No student registered for this course currently.</p>
+              </div>
+              <div class="form-row align-items-center justify-content-center">
+                  <p>Register yourself to be discovered by others.</p>
+              </div>
+              <div class="form-row align-items-center justify-content-center">
+              <form action="{{ url_for('add_course_form') }}" method="GET">
+                <input class="form-control" type="hidden" placeholder="Course URL" id="course_url" name="course_url", value="{{course_url}}">
+                <button type="submit " class="btn btn-primary" style="float:right ">Add Course</button>
+              </form>
+              </div>
+              {% endif %}
         </div>
     </div>
 

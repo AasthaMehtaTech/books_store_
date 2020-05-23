@@ -97,6 +97,7 @@ def add_course_form():
 def search_buddy_form():
     students_detail = list()
     result_description = ''
+    course_url = ''
     if request.method == 'POST':
         course_url=request.form.get('course_url')
         english=request.form.get('english')
@@ -115,10 +116,10 @@ def search_buddy_form():
                 data['languages'] = languages
                 students_detail.append(data) # jsonify(course.serialize())
             result_description = f'Results for {course_url}:'
-            return render_template("search_buddy.html", students_detail=students_detail, result_description=result_description)
+            return render_template("search_buddy.html", students_detail=students_detail, result_description=result_description, course_url=course_url)
         except Exception as e:
     	    return(str(e))
-    return render_template("search_buddy.html", students_detail = students_detail, result_description=result_description)
+    return render_template("search_buddy.html", students_detail = students_detail, result_description=result_description, course_url=course_url)
 
 @app.route("/search_course/",methods=['GET', 'POST'])
 def search_course_form():
@@ -144,6 +145,14 @@ def search_course_form():
 # TODO:
 # Implement Find Learners   [YES]
 # Homepage                  [YES]
+# Phone/Email Authentication +-
+# User Profile with login with id pass or one click google sign in
+# Show interest button along with course link
+
+# Notification if no result found
+# Goto Homepage
+# Clickable Email Address on search_buddy
+# Auto Email Generation by clicking on show interest
 # Deploy on Heroku          []
 
 if __name__ == '__main__':
